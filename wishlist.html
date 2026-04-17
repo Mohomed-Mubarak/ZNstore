@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <!-- font-preload-patched -->
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap"></noscript>
+<script src="js/theme-init.js"></script>
+<!-- zm-critical-loader-css -->
+  <!-- CRITICAL: Inline loader CSS — prevents black-screen if external CSS is slow -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>My Wishlist — ZenMarket</title>
+  <meta name="description" content="Your saved products on ZenMarket. Review and shop your wishlist anytime.">
+  <link rel="canonical" href="https://zenmarket.lk/wishlist.html">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#0d0f14" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#f4f5f9" media="(prefers-color-scheme: light)">
+
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+  <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" as="style" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous"></noscript>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/loader.css">
+  <link rel="stylesheet" href="css/pages/wishlist.css">
+  <!--cursorly animation-->
+  <script src="https://cdn.jsdelivr.net/gh/iamashruu/cursorly.js@latest/dist/cursorly.min.js"></script>
+</head>
+
+<body class="has-bottom-nav">
+  <script>
+      const cursor = Cursorly.init();
+      cursor.setIcon(6);
+  </script>
+  <a href="#main" class="skip-link">Skip to content</a>
+  <div id="page-loader"><div class="loader-logo">ZenMarket</div><div class="loader-dots"><span></span><span></span><span></span></div></div>
+  <div id="page-progress"></div>
+  <div id="toast-container"></div>
+
+  <main id="main" class="page-enter">
+    <section class="section-sm">
+      <div class="container">
+
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="index.html">Home</a>
+          <span class="breadcrumb-sep"><i class="fa-solid fa-chevron-right"></i></span>
+          <span class="breadcrumb-current">Wishlist</span>
+        </nav>
+
+        <!-- Page header -->
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:2rem">
+          <div>
+            <h1 style="font-size:var(--fs-3xl);margin-bottom:.25rem">
+              My Wishlist
+              <span id="wishlist-count-badge" style="display:none;font-size:var(--fs-base);background:var(--clr-gold-bg);color:var(--clr-gold);border:1px solid var(--clr-gold);border-radius:var(--r-full);padding:.2rem .75rem;margin-left:.75rem;font-family:var(--ff-body);font-weight:var(--fw-semi)"></span>
+            </h1>
+            <p style="color:var(--clr-text-3);font-size:var(--fs-sm)">Products you've saved for later</p>
+          </div>
+          <div style="display:flex;gap:.75rem;flex-wrap:wrap">
+            <button id="share-wishlist-btn" class="btn btn-ghost btn-sm" style="display:none">
+              <i class="fa-solid fa-share-nodes"></i> Share
+            </button>
+            <button id="clear-wishlist-btn" class="btn btn-ghost btn-sm" style="display:none">
+              <i class="fa-regular fa-trash-can"></i> Clear All
+            </button>
+            <a href="shop.html" class="btn btn-outline btn-sm">
+              <i class="fa-solid fa-store"></i> Continue Shopping
+            </a>
+          </div>
+        </div>
+
+        <!-- Sort bar (shown when items exist, visibility controlled by JS) -->
+        <div id="wishlist-toolbar" style="display:none;margin-bottom:1.5rem;align-items:center;gap:.75rem;flex-wrap:wrap">
+          <span style="font-size:var(--fs-sm);color:var(--clr-text-3)">Sort by:</span>
+          <div style="display:flex;gap:.5rem;flex-wrap:wrap" id="wishlist-sort-chips">
+            <button class="chip active" data-sort="date-desc"><i class="fa-solid fa-clock"></i> Recently Added</button>
+            <button class="chip" data-sort="price-asc"><i class="fa-solid fa-arrow-up"></i> Price: Low–High</button>
+            <button class="chip" data-sort="price-desc"><i class="fa-solid fa-arrow-down"></i> Price: High–Low</button>
+            <button class="chip" data-sort="name-asc"><i class="fa-solid fa-a"></i> Name A–Z</button>
+          </div>
+        </div>
+
+        <!-- Wishlist grid -->
+        <div id="wishlist-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1.25rem"></div>
+
+        <!-- Empty state -->
+        <div id="wishlist-empty" class="empty-state" style="display:none">
+          <i class="fa-regular fa-heart"></i>
+          <h3>Your wishlist is empty</h3>
+          <p>Save products you love and find them here whenever you want.</p>
+          <a href="shop.html" class="btn btn-primary">
+            <i class="fa-solid fa-store"></i> Explore Shop
+          </a>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script type="module" src="js/wishlist-page.js"></script>
+</body>
+</html>

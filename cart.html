@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!-- font-preload-patched -->
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap"></noscript>
+<script src="js/theme-init.js"></script>
+<!-- zm-critical-loader-css -->
+  <!-- CRITICAL: Inline loader CSS — prevents black-screen if external CSS is slow -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Shopping Cart — ZenMarket</title>
+  <meta name="description" content="Review your cart and proceed to checkout.">
+  <meta name="theme-color" content="#0d0f14" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#f4f5f9" media="(prefers-color-scheme: light)">
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" as="style" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous"></noscript>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="css/loader.css">
+  <link rel="stylesheet" href="css/pages/cart.css">
+</head>
+<body>
+  <script>
+      const cursor = Cursorly.init();
+      cursor.setIcon(6);
+  </script>
+  <a href="#main" class="skip-link">Skip to content</a>
+  <div id="page-loader"><div class="loader-logo">ZenMarket</div><div class="loader-dots"><span></span><span></span><span></span></div></div>
+  <div id="page-progress"></div>
+  <div id="toast-container"></div>
+
+  <main id="main" class="page-enter">
+    <div class="page-header">
+      <div class="container">
+        <div class="breadcrumb" style="margin-bottom:.75rem">
+          <a href="index.html">Home</a>
+          <span class="breadcrumb-sep"><i class="fa-solid fa-chevron-right" style="font-size:.625rem"></i></span>
+          <span class="current">Shopping Cart</span>
+        </div>
+        <h1>Shopping Cart</h1>
+      </div>
+    </div>
+
+    <div class="container section-sm">
+      <div class="cart-layout">
+        <!-- Cart Items -->
+        <div>
+          <div id="cart-items-container">
+            <!-- Rendered by JS -->
+          </div>
+          <div style="margin-top:1.5rem">
+            <a href="shop.html" class="btn btn-ghost">
+              <i class="fa-solid fa-arrow-left"></i> Continue Shopping
+            </a>
+          </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="cart-summary">
+          <h3 style="font-size:1.125rem;margin-bottom:1.25rem;padding-bottom:1rem;border-bottom:1px solid var(--clr-border)">Order Summary</h3>
+
+          <!-- Coupon -->
+          <div class="coupon-row">
+            <input class="form-control" type="text" id="coupon-input" placeholder="Coupon code">
+            <button class="btn btn-outline" id="apply-coupon">Apply</button>
+          </div>
+          <div id="coupon-msg" style="font-size:.8125rem;margin-bottom:.75rem"></div>
+
+          <!-- Totals -->
+          <div class="summary-row">
+            <span>Subtotal</span>
+            <span id="summary-subtotal" style="font-family:var(--ff-mono)">Rs. 0</span>
+          </div>
+          <div class="summary-row">
+            <span>Shipping</span>
+            <span style="color:var(--clr-text-3);font-size:.875rem" id="shipping-note">Calculated at checkout</span>
+          </div>
+          <div class="summary-row">
+            <span>Discount</span>
+            <span id="summary-discount" style="font-family:var(--ff-mono);color:var(--clr-success)">Rs. 0</span>
+          </div>
+          <div class="summary-row total">
+            <span>Total</span>
+            <span class="val" id="summary-total">Rs. 0</span>
+          </div>
+
+          <a href="checkout.html" class="btn btn-primary btn-block btn-lg" id="checkout-btn" style="margin-top:1rem">
+            <i class="fa-solid fa-lock"></i> Proceed to Checkout
+          </a>
+
+          <div style="margin-top:1rem;text-align:center">
+            <div style="display:flex;justify-content:center;gap:.75rem;margin-bottom:.5rem">
+              <i class="fa-solid fa-shield-halved" style="color:var(--clr-text-3)"></i>
+              <span style="font-size:.75rem;color:var(--clr-text-3)">Secure 256-bit SSL Encryption</span>
+            </div>
+            <div style="display:flex;justify-content:center;gap:.5rem">
+              <span class="payment-logo">VISA</span>
+              <span class="payment-logo">MC</span>
+              <span class="payment-logo">PayHere</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+<script type="module" src="js/cart-page.js"></script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+# ============================================================
+# ZENMARKET — Cloudflare Pages / CDN Headers
+# ============================================================
+# This file adds headers at the Cloudflare CDN edge layer,
+# complementing the headers already set in vercel.json.
+#
+# Cloudflare sits in front of Vercel (proxied via CF DNS),
+# so both header sets are applied — Vercel headers first,
+# then these are merged/augmented at the CDN edge.
+#
+# CLOUDFLARE SETUP:
+#   1. Add your domain to Cloudflare (set nameservers)
+#   2. Set DNS A record → your Vercel deployment IP
+#      OR use Cloudflare Worker to proxy to Vercel
+#   3. Enable "Proxy" (orange cloud) on the DNS record
+#   4. SSL/TLS → set mode to "Full (Strict)"
+#   5. Speed → Optimization → enable Auto Minify (HTML/CSS/JS)
+#   6. Caching → Cache Rules → cache static assets aggressively
+#
+# RECOMMENDED CLOUDFLARE SETTINGS:
+#   Security → WAF → enable managed ruleset
+#   Security → Bot Fight Mode → ON
+#   Security → DDoS → HTTP DDoS attack protection → High
+#   Speed → Rocket Loader → OFF (breaks ES modules)
+#   Speed → Mirage → OFF
+#   Network → HTTP/3 (QUIC) → ON
+#   Network → 0-RTT Connection Resumption → ON
+# ============================================================
+
+# ── All pages ────────────────────────────────────────────────────
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(self "https://www.payhere.lk")
+  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+  Cross-Origin-Opener-Policy: same-origin-allow-popups
+  X-Powered-By: ZenMarket
+
+# ── API routes — no caching, no indexing ─────────────────────────
+/api/*
+  Cache-Control: no-store, no-cache, must-revalidate
+  X-Robots-Tag: noindex, nofollow
+  Pragma: no-cache
+
+# ── Static assets — long cache (Cloudflare CDN) ──────────────────
+/css/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/js/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+# env.js contains runtime config that must never be stale — override the /js/* rule
+/js/env.js
+  Cache-Control: no-store, no-cache, must-revalidate
+
+/*.webp
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+
+/*.png
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+
+/*.jpg
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+
+/*.svg
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+
+/*.ico
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+
+/*.woff2
+  Cache-Control: public, max-age=31536000, immutable
+
+# ── HTML pages — always revalidate ───────────────────────────────
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/
+  Cache-Control: public, max-age=0, must-revalidate

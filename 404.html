@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<!--
+  ╔══════════════════════════════════════════════════════════════╗
+  ║  ZENMARKET — 404 Not Found                                   ║
+  ╠══════════════════════════════════════════════════════════════╣
+  ║  CDN / REVERSE-PROXY CACHING DIRECTIVES                      ║
+  ║                                                              ║
+  ║  Nginx:                                                      ║
+  ║    error_page 404 /404.html;                                 ║
+  ║    location = /404.html {                                    ║
+  ║      internal;                                               ║
+  ║      add_header Cache-Control "public, max-age=300";         ║
+  ║      add_header X-Robots-Tag  "noindex, nofollow";           ║
+  ║      add_header Vary          "Accept-Encoding";             ║
+  ║    }                                                         ║
+  ║                                                              ║
+  ║  Cloudflare Page Rule / Cache Rule:                          ║
+  ║    URL: zenmarket.lk/404.html                                ║
+  ║    Cache-Control: public, max-age=300, s-maxage=60           ║
+  ║    Edge TTL: 1 minute (so fixes propagate fast)              ║
+  ╚══════════════════════════════════════════════════════════════╝
+-->
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <!-- font-preload-patched -->
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap"></noscript>
+
+  <!-- Anti-FOUC: restore saved theme before first paint -->
+<script src="js/theme-init.js"></script>
+<!-- zm-critical-loader-css -->
+  <!-- CRITICAL: Inline loader CSS — prevents black-screen if external CSS is slow -->
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+  <!-- ── SEO meta ──────────────────────────────────────── -->
+  <title>404 — Page Not Found | ZenMarket</title>
+  <meta name="description"
+    content="The page you're looking for doesn't exist. Browse ZenMarket's premium products or return to the homepage.">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="canonical" href="https://zenmarket.lk/404.html">
+
+  <!-- ── Open Graph ────────────────────────────────────── -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="404 — Page Not Found | ZenMarket">
+  <meta property="og:description" content="This page doesn't exist on ZenMarket. Head back to browse premium products.">
+  <meta property="og:url" content="https://zenmarket.lk/404.html">
+  <meta property="og:site_name" content="ZenMarket">
+  <meta property="og:image" content="https://zenmarket.lk/img/og-default.jpg">
+
+  <!-- ── Twitter Card ──────────────────────────────────── -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="404 — Page Not Found | ZenMarket">
+  <meta name="twitter:description" content="This page doesn't exist on ZenMarket.">
+
+  <!-- Theme colour chips per-theme -->
+  <meta name="theme-color" content="#0d0f14" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#f4f5f9" media="(prefers-color-scheme: light)">
+
+  <!-- Proxy/CDN cache hint (headers take precedence — see comment above) -->
+  <meta http-equiv="Cache-Control" content="public, max-age=300">
+
+  <!-- ── Resource hints ────────────────────────────────── -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+
+  <!-- ── Fonts ─────────────────────────────────────────── -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400&display=swap"
+    rel="stylesheet">
+
+  <!-- ── JSON-LD Structured Data ───────────────────────── -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "404 — Page Not Found",
+    "description": "The requested page could not be found on ZenMarket.",
+    "url": "https://zenmarket.lk/404.html",
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "ZenMarket",
+      "url": "https://zenmarket.lk",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://zenmarket.lk/store.html?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+      }
+    },
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home",          "item": "https://zenmarket.lk/" },
+        { "@type": "ListItem", "position": 2, "name": "404 Not Found"                                 }
+      ]
+    }
+  }
+  </script>
+
+  <link rel="stylesheet" href="css/loader.css">
+  <link rel="stylesheet" href="css/pages/404.css">
+  <!--cursorly animation-->
+  <script src="https://cdn.jsdelivr.net/gh/iamashruu/cursorly.js@latest/dist/cursorly.min.js"></script>
+</head>
+
+<body>
+   <!--cursorly animation-->
+  <script>
+      const cursor = Cursorly.init();
+      cursor.setIcon(6);
+  </script>
+  <!-- Page Loader (CSS failsafe auto-hides after 10s if JS doesn't) -->
+  <div id="page-loader">
+    <div class="loader-logo">ZenMarket</div>
+    <div class="loader-dots"><span></span><span></span><span></span></div>
+  </div>
+
+  <!-- Ambient bg glow -->
+  <div class="bg-orb" aria-hidden="true"></div>
+
+  <!-- Particle canvas -->
+  <div id="particle-field" aria-hidden="true"></div>
+
+  <!-- Brand wordmark -->
+  <a href="index.html" class="brand" aria-label="ZenMarket — Back to homepage">ZenMarket</a>
+
+  <!-- Main content -->
+  <main class="page" id="main" role="main">
+
+    <p class="error-code" aria-label="Error 404">404</p>
+    <div class="rule" aria-hidden="true"></div>
+    <h1 class="error-title">This page wandered off</h1>
+    <p class="error-sub">
+      It may have been moved, renamed, or never existed.
+      Let's get you back on track.
+    </p>
+
+    <div class="search-wrap" role="search" aria-label="Product search">
+      <input id="search-404" class="search-input" type="search" placeholder="Search products…"
+        aria-label="Search ZenMarket products" autocomplete="off" spellcheck="false">
+      <i class="fa-solid fa-magnifying-glass search-icon" aria-hidden="true"></i>
+    </div>
+
+    <nav class="cta-group" aria-label="Recovery options">
+      <a href="index.html" class="btn btn-primary">
+        <i class="fa-solid fa-house" aria-hidden="true"></i> Home
+      </a>
+      <a href="store.html" class="btn btn-ghost">
+        <i class="fa-solid fa-store" aria-hidden="true"></i> Browse Store
+      </a>
+      <a href="javascript:history.back()" class="btn btn-ghost">
+        <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Go Back
+      </a>
+    </nav>
+  </main>
+
+  <p class="status-bar">
+    HTTP <em>404</em> &nbsp;·&nbsp; zenmarket.lk
+  </p>
+
+  <!-- Font Awesome — non-blocking load -->
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" as="style" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous"></noscript>
+  <noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      crossorigin="anonymous">
+  </noscript>
+
+  <!-- ── Anime.js v4 particle animation ──────────────────────── -->
+  <script type="module">
+    import { animate, utils } from 'https://cdn.jsdelivr.net/npm/animejs@4.0.2/lib/anime.esm.min.js';
+
+    // Hide loader — CDN import resolved, page is ready
+    const _loader = document.getElementById('page-loader');
+    if (_loader) setTimeout(() => _loader.classList.add('hidden'), 300);
+
+    const field = document.getElementById('particle-field');
+    const COUNT = 140;
+
+    // Spawn & animate each particle independently
+    for (let i = 0; i < COUNT; i++) {
+      const el = document.createElement('div');
+      el.classList.add('particle');
+
+      // Visual variety: normal / glow / tiny
+      const roll = i % 12;
+      if (roll === 0) el.classList.add('glow');
+      else if (roll <= 3) el.classList.add('tiny');
+
+      // Scatter randomly across the whole viewport
+      el.style.left = utils.random(0, 100) + '%';
+      el.style.top = utils.random(0, 100) + '%';
+      field.appendChild(el);
+
+      const dur = utils.random(3000, 7000);
+      const delay = utils.random(0, 3500);
+      const peak = utils.random(0.25, 0.8, 2);
+
+      animate(el, {
+        // Gentle drift in both axes
+        x: [
+          { to: utils.random(-140, 140) + 'px' },
+          { to: utils.random(-140, 140) + 'px' },
+        ],
+        y: [
+          { to: utils.random(-90, 90) + 'px' },
+          { to: utils.random(-90, 90) + 'px' },
+        ],
+        // Breathe in → breathe out
+        opacity: [
+          { from: 0, to: peak },
+          { to: 0 },
+        ],
+        scale: [
+          { from: 0, to: utils.random(0.6, 1.5, 2) },
+          { to: 0 },
+        ],
+        duration: dur,
+        delay: delay,
+        ease: 'inOutSine',
+        loop: true,
+      });
+    }
+
+    // Search → redirect to store
+    document.getElementById('search-404').addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        const q = e.target.value.trim();
+        if (q) window.location.href = 'store.html?q=' + encodeURIComponent(q);
+      }
+    });
+  </script>
+
+</body>
+
+</html>

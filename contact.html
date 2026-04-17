@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <!-- font-preload-patched -->
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap"></noscript>
+<script src="js/theme-init.js"></script>
+<!-- zm-critical-loader-css -->
+  <!-- CRITICAL: Inline loader CSS — prevents black-screen if external CSS is slow -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Contact ZenMarket — Customer Support Sri Lanka</title>
+  <link rel="canonical" href="https://zenmarket.lk/contact.html">
+  <meta property="og:title" content="Contact ZenMarket — Customer Support Sri Lanka">
+  <meta property="og:description" content="Contact ZenMarket for order help, product queries, or general support. Reach our team via email, phone, or WhatsApp. We're here to help.">
+  <meta property="og:url" content="https://zenmarket.lk/contact.html">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://zenmarket.lk/assets/og-image.jpg">
+  <meta property="og:site_name" content="ZenMarket">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Contact ZenMarket — Customer Support Sri Lanka">
+  <meta name="twitter:description" content="Contact ZenMarket for order help, product queries, or general support. Reach our team via email, phone, or WhatsApp. We're here to help.">
+  <meta name="description" content="Get in touch with ZenMarket Sri Lanka. We are here to help.">
+  <meta name="theme-color" content="#0d0f14" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#f4f5f9" media="(prefers-color-scheme: light)">
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" as="style" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous"></noscript>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script type="module">
+    import { withLoader } from './js/loader.js';
+    import { injectLayout } from './js/layout.js';
+    import { LS, EMAILJS } from './js/config.js';
+    import { addMessage } from './js/contact-messages.js';
+    import toast from './js/toast.js';
+    import { initPhoneInput, isPhoneValid, getPhoneValue } from './js/phone-input.js';
+
+    withLoader(async () => {
+      injectLayout({ activePage: 'Contact' });
+
+      /* ── Load contact info from admin settings ───────────── */
+      let settings = {};
+      try { settings = JSON.parse(localStorage.getItem(LS.siteSettings) || '{}'); } catch { }
+
+      const phone = settings.phone || '+94 77 123 4567';
+      const email = settings.email || 'hello@zenmarket.lk';
+      const address = settings.address || 'Colombo 03, Sri Lanka';
+      const waPhone = settings.waPhone || '94771234567';
+
+      const contactData = [
+        { icon: 'fa-solid fa-phone', label: 'Phone', value: phone, href: `tel:${phone}` },
+        { icon: 'fa-solid fa-envelope', label: 'Email', value: email, href: `mailto:${email}` },
+        { icon: 'fa-brands fa-whatsapp', label: 'WhatsApp', value: phone, href: `https://wa.me/${waPhone}` },
+        { icon: 'fa-solid fa-location-dot', label: 'Address', value: address, href: null },
+      ];
+
+      const contactInfoEl = document.getElementById('contact-info-list');
+      if (contactInfoEl) {
+        contactInfoEl.innerHTML = contactData.map(item => `
+          <div class="contact-info-item">
+            <div class="contact-icon"><i class="${item.icon}"></i></div>
+            <div>
+              <strong style="display:block;margin-bottom:.25rem;color:var(--clr-text)">${item.label}</strong>
+              ${item.href
+            ? `<a href="${item.href}" style="color:var(--clr-text-2)" ${item.href.startsWith('http') ? 'target="_blank" rel="noopener"' : ''}>${item.value}</a>`
+            : `<p style="color:var(--clr-text-2);margin:0">${item.value}</p>`
+          }
+            </div>
+          </div>`).join('');
+      }
+
+      /* ── WhatsApp CTA ────────────────────────────────────── */
+      const waCta = document.getElementById('wa-cta');
+      if (waCta) waCta.href = `https://wa.me/${waPhone}?text=Hi%20ZenMarket!%20I%20need%20help.`;
+
+      /* ── Business hours ──────────────────────────────────── */
+      const bizHours = [
+        { day: 'Monday – Friday', hours: settings.biz_mon_fri || '9:00 AM – 6:00 PM', closed: settings.biz_mon_fri_closed === 'true' },
+        { day: 'Saturday', hours: settings.biz_sat || '10:00 AM – 4:00 PM', closed: settings.biz_sat_closed === 'true' },
+        { day: 'Sunday', hours: settings.biz_sun || 'Closed', closed: settings.biz_sun_closed !== 'false' },
+      ];
+      const bizHoursEl = document.getElementById('biz-hours');
+      if (bizHoursEl) {
+        bizHoursEl.innerHTML = `<div style="display:flex;flex-direction:column;gap:.75rem">` +
+          bizHours.map(({ day, hours, closed }) => `
+            <div style="display:flex;justify-content:space-between;padding:.625rem 0;border-bottom:1px solid var(--clr-border);font-size:.875rem">
+              <span style="color:var(--clr-text-2)">${day}</span>
+              <span style="color:${closed ? 'var(--clr-error)' : 'var(--clr-success)'};font-weight:600">${closed ? 'Closed' : hours}</span>
+            </div>`).join('') + '</div>';
+      }
+
+      /* ── Contact form ────────────────────────────────────── */
+      // ── Init phone input ─────────────────────────────────────
+      const phoneInput = document.querySelector('#contact-form input[name="phone"]');
+      if (phoneInput) initPhoneInput(phoneInput);
+
+      document.getElementById('contact-form')?.addEventListener('submit', async e => {
+        e.preventDefault();
+        toast.dismissAll();
+        const form = e.target;
+        const btn = form.querySelector('button[type="submit"]');
+
+        // Collect fields
+        const data = {
+          firstName: form.firstName.value.trim(),
+          lastName: form.lastName.value.trim(),
+          email: form.email.value.trim(),
+          phone: getPhoneValue(phoneInput),
+          subject: form.subject.value.trim(),
+          message: form.message.value.trim(),
+        };
+
+        // Basic validation
+        if (!data.firstName || !data.email || !data.subject || !data.message) {
+          toast.error('Missing fields', 'Please fill in all required fields.');
+          return;
+        }
+        if (data.phone && !isPhoneValid(phoneInput)) {
+          toast.error('Invalid phone', 'Enter a valid number: +94 followed by 9 digits.');
+          return;
+        }
+
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending…';
+
+        // ── 1. Save to localStorage (always, instant) ─────────
+        addMessage(data);
+
+        // ── 2. Send via EmailJS (if configured) ───────────────
+        const ejsConfigured = EMAILJS.publicKey && !EMAILJS.publicKey.startsWith('YOUR_');
+        if (ejsConfigured) {
+          try {
+            // Lazy-load EmailJS SDK
+            if (!window.emailjs) {
+              await new Promise((res, rej) => {
+                const s = document.createElement('script');
+                s.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js';
+                s.onload = res; s.onerror = rej;
+                document.head.appendChild(s);
+              });
+              window.emailjs.init({ publicKey: EMAILJS.publicKey });
+            }
+            await window.emailjs.send(EMAILJS.serviceId, EMAILJS.templateId, {
+              from_name: `${data.firstName} ${data.lastName}`,
+              from_email: data.email,
+              phone: data.phone || 'Not provided',
+              subject: data.subject,
+              message: data.message,
+              reply_to: data.email,
+              admin_email: EMAILJS.adminEmail,
+            });
+          } catch (err) {
+            // EmailJS failed — message is still saved locally, so just warn
+            console.warn('[ZenMarket] EmailJS send failed:', err);
+            toast.warning('Saved locally', 'Email delivery failed — our team will still see your message in the admin panel.');
+            form.reset();
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Send Message';
+            return;
+          }
+        }
+
+        toast.success('Message Sent!', 'We\'ll get back to you within 24 hours.');
+        form.reset();
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Send Message';
+      });
+    });
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "name": "Contact ZenMarket",
+    "url": "https://zenmarket.lk/contact.html",
+    "description": "Get in touch with ZenMarket Sri Lanka for support and enquiries."
+  }
+  </script>
+  <link rel="stylesheet" href="css/loader.css">
+  <link rel="stylesheet" href="css/pages/contact.css">
+</head>
+
+<body>
+
+  <script>
+      const cursor = Cursorly.init();
+      cursor.setIcon(6);
+  </script>
+  
+  <a href="#main" class="skip-link">Skip to content</a>
+  <div id="page-loader">
+    <div class="loader-logo">ZenMarket</div>
+    <div class="loader-dots"><span></span><span></span><span></span></div>
+  </div>
+  <div id="page-progress"></div>
+  <div id="toast-container"></div>
+
+  <main id="main" class="page-enter">
+    <div class="page-header">
+      <div class="container">
+        <div class="breadcrumb" style="margin-bottom:.75rem">
+          <a href="index.html">Home</a>
+          <span class="breadcrumb-sep"><i class="fa-solid fa-chevron-right" style="font-size:.625rem"></i></span>
+          <span class="current">Contact</span>
+        </div>
+        <h1>Get in Touch</h1>
+        <p style="color:var(--clr-text-2)">We are here to help. Reach us via any channel below.</p>
+      </div>
+    </div>
+
+    <div class="container section-sm">
+      <div class="contact-layout">
+
+        <!-- Left: Info cards -->
+        <div>
+          <div id="contact-info-list">
+            <div class="skeleton" style="height:80px;border-radius:8px;margin-bottom:1rem"></div>
+            <div class="skeleton" style="height:80px;border-radius:8px;margin-bottom:1rem"></div>
+            <div class="skeleton" style="height:80px;border-radius:8px;margin-bottom:1rem"></div>
+            <div class="skeleton" style="height:80px;border-radius:8px"></div>
+          </div>
+
+          <div class="card" style="margin-top:1.5rem">
+            <h4 style="font-size:.9375rem;margin-bottom:1rem;display:flex;align-items:center;gap:.5rem">
+              <i class="fa-regular fa-clock" style="color:var(--clr-gold)"></i> Business Hours
+            </h4>
+            <div id="biz-hours"></div>
+          </div>
+
+          <a href="#" id="wa-cta" target="_blank" rel="noopener"
+            style="display:flex;align-items:center;gap:1rem;padding:1.25rem;background:rgba(37,211,102,.1);border:1px solid rgba(37,211,102,.3);border-radius:var(--r-lg);margin-top:1.5rem;text-decoration:none;transition:background var(--t-fast)">
+            <div
+              style="width:48px;height:48px;background:var(--clr-whatsapp);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <i class="fa-brands fa-whatsapp" style="color:#fff;font-size:1.5rem"></i>
+            </div>
+            <div>
+              <div style="font-weight:600;color:var(--clr-text)">Chat on WhatsApp</div>
+              <div style="font-size:.8125rem;color:var(--clr-text-3)">Usually replies within minutes</div>
+            </div>
+            <i class="fa-solid fa-arrow-right" style="color:var(--clr-text-3);margin-left:auto"></i>
+          </a>
+        </div>
+
+        <!-- Right: Contact form -->
+        <div class="card">
+          <h3 style="font-size:1.25rem;margin-bottom:.5rem">Send a Message</h3>
+          <p style="color:var(--clr-text-3);font-size:.875rem;margin-bottom:1.5rem">
+            Fill in the form and we will respond within 24 hours.
+          </p>
+          <form id="contact-form" novalidate>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label required">First Name</label>
+                <input class="form-control" type="text" name="firstName" required placeholder="Dinusha">
+              </div>
+              <div class="form-group">
+                <label class="form-label required">Last Name</label>
+                <input class="form-control" type="text" name="lastName" required placeholder="Perera">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label required">Email Address</label>
+              <div class="input-group">
+                <i class="input-icon fa-solid fa-envelope"></i>
+                <input class="form-control" type="email" name="email" required placeholder="you@email.com">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Phone Number</label>
+              <div class="input-group">
+                <i class="input-icon fa-solid fa-phone"></i>
+                <input class="form-control" type="tel" name="phone" placeholder="+94 7X XXX XXXX">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label required">Subject</label>
+              <select class="form-control" name="subject" required>
+                <option value="">Select a topic…</option>
+                <option>Order enquiry</option>
+                <option>Returns &amp; refunds</option>
+                <option>Product question</option>
+                <option>Shipping &amp; delivery</option>
+                <option>Partnership / wholesale</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label required">Message</label>
+              <textarea class="form-control" name="message" rows="5" required
+                placeholder="Tell us how we can help…"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block btn-lg">
+              <i class="fa-solid fa-paper-plane"></i> Send Message
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+
+</html>

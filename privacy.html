@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!-- font-preload-patched -->
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap"></noscript>
+<script src="js/theme-init.js"></script>
+<!-- zm-critical-loader-css -->
+  <!-- CRITICAL: Inline loader CSS — prevents black-screen if external CSS is slow -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Privacy Policy — ZenMarket</title>
+  <meta name="theme-color" content="#0d0f14" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#f4f5f9" media="(prefers-color-scheme: light)">
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" as="style" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous"></noscript>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script type="module">
+    import { withLoader } from './js/loader.js';
+    import { injectLayout } from './js/layout.js';
+    withLoader(async () => { injectLayout({}); });
+  </script>
+  <link rel="stylesheet" href="css/loader.css">
+  <link rel="stylesheet" href="css/pages/privacy.css">
+</head>
+<body>
+  <div id="page-loader"><div class="loader-logo">ZenMarket</div><div class="loader-dots"><span></span><span></span><span></span></div></div>
+  <div id="page-progress"></div>
+  <div id="toast-container"></div>
+  <main id="main" class="page-enter">
+    <div class="page-header">
+      <div class="container"><h1>Privacy Policy</h1></div>
+    </div>
+    <div class="info-page-content">
+      <p>Last updated: January 2024</p><h2>Information We Collect</h2><p>We collect information you provide (name, email, address, phone) and usage data (pages visited, products viewed).</p><h2>How We Use Your Information</h2><ul><li>To process and fulfill orders</li><li>To send order updates via email and WhatsApp</li><li>To improve our products and services</li><li>To prevent fraud and ensure security</li></ul><h2>Data Sharing</h2><p>We share data with: payment processors (PayHere), delivery partners, and analytics providers (PostHog). We never sell your personal data.</p><h2>Data Security</h2><p>We use industry-standard security including SSL encryption and Cloudflare protection for all data transmissions.</p><h2>Your Rights</h2><p>You may request access to, correction of, or deletion of your personal data by contacting hello@zenmarket.lk</p>
+    </div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!-- font-preload-patched -->
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap"></noscript>
+<script src="js/theme-init.js"></script>
+<!-- zm-critical-loader-css -->
+  <!-- CRITICAL: Inline loader CSS — prevents black-screen if external CSS is slow -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>ZenMarket Blog — Shopping Tips, Guides & News Sri Lanka</title>
+  <link rel="canonical" href="https://zenmarket.lk/blog.html">
+  <meta property="og:title" content="ZenMarket Blog — Shopping Tips, Guides & News Sri Lanka">
+  <meta property="og:description" content="Explore the ZenMarket blog for shopping tips, product guides, and the latest news from Sri Lanka's premium online store.">
+  <meta property="og:url" content="https://zenmarket.lk/blog.html">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://zenmarket.lk/assets/og-image.jpg">
+  <meta property="og:site_name" content="ZenMarket">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ZenMarket Blog — Shopping Tips, Guides & News Sri Lanka">
+  <meta name="twitter:description" content="Explore the ZenMarket blog for shopping tips, product guides, and the latest news from Sri Lanka's premium online store.">
+  <meta name="description" content="Tips, guides, and news from ZenMarket Sri Lanka.">
+  <meta name="theme-color" content="#0d0f14" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#f4f5f9" media="(prefers-color-scheme: light)">
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" as="style" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous"></noscript>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script type="module">
+    import { withLoader } from './js/loader.js';
+    import { injectLayout } from './js/layout.js';
+    import { getPosts } from './js/blog-data.js';
+    withLoader(async () => {
+      injectLayout({ activePage: 'Blog' });
+      const allPosts = (await getPosts()).filter(p => p.published);
+      const cats = ['All', ...new Set(allPosts.map(p => p.category).filter(Boolean))];
+      let active = 'All';
+      renderFilterBar(cats);
+      renderPosts(allPosts);
+      function renderFilterBar(cats) {
+        const bar = document.getElementById('blog-filter-bar');
+        if (!bar) return;
+        bar.innerHTML = cats.map(c => `<button class="blog-filter-btn${c===active?' active':''}" data-cat="${c}">${c}</button>`).join('');
+        bar.querySelectorAll('.blog-filter-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            active = btn.dataset.cat;
+            bar.querySelectorAll('.blog-filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderPosts(active === 'All' ? allPosts : allPosts.filter(p => p.category === active));
+          });
+        });
+      }
+      function fmt(d) { return new Date(d).toLocaleDateString('en-LK',{day:'2-digit',month:'short',year:'numeric'}); }
+      function renderPosts(posts) {
+        const featured = posts.filter(p => p.featured).slice(0,2);
+        const rest = posts.filter(p => !featured.includes(p));
+        const bannerEl = document.getElementById('blog-featured');
+        if (bannerEl) {
+          bannerEl.style.display = featured.length ? '' : 'none';
+          bannerEl.innerHTML = featured.map(p => `
+            <a href="blog-post.html?slug=${p.slug}" class="blog-featured-card">
+              <img src="${p.coverImage||''}" alt="${p.title}" onerror="this.style.display='none'">
+              <div class="blog-featured-body">
+                <div class="blog-featured-cat">${p.category||''}</div>
+                <div class="blog-featured-title">${p.title}</div>
+                <div class="blog-featured-meta"><i class="fa-regular fa-calendar"></i> ${fmt(p.createdAt)} &nbsp;·&nbsp; ${p.readTime||5} min read</div>
+              </div>
+            </a>`).join('');
+        }
+        const grid = document.getElementById('blog-grid');
+        const empty = document.getElementById('blog-empty');
+        if (!grid) return;
+        if (!posts.length) { grid.innerHTML=''; if(empty) empty.style.display=''; return; }
+        if (empty) empty.style.display = 'none';
+        grid.innerHTML = rest.map((p,i) => `
+          <article class="blog-card reveal${i>0?` delay-${Math.min(i,3)}`:''}">
+            <div class="blog-card-img"><img src="${p.coverImage||'https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=600&q=70'}" alt="${p.title}" loading="lazy"></div>
+            <div class="blog-card-body">
+              <div class="blog-card-cat">${p.category||'General'}</div>
+              <h3 class="blog-card-title">${p.title}</h3>
+              <p class="blog-card-excerpt">${p.excerpt||''}</p>
+            </div>
+            <div class="blog-card-footer">
+              <span class="blog-meta"><i class="fa-regular fa-calendar"></i> ${fmt(p.createdAt)} &nbsp;·&nbsp; ${p.readTime||5} min</span>
+              <a href="blog-post.html?slug=${p.slug}" style="font-size:.8125rem;color:var(--clr-gold)">Read More →</a>
+            </div>
+          </article>`).join('');
+      }
+    });
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "name": "ZenMarket Blog",
+    "url": "https://zenmarket.lk/blog.html",
+    "description": "Shopping tips, product guides, and news from ZenMarket Sri Lanka.",
+    "publisher": {
+      "@type": "Organization",
+      "name": "ZenMarket",
+      "url": "https://zenmarket.lk"
+    }
+  }
+  </script>
+  <link rel="stylesheet" href="css/loader.css">
+  <link rel="stylesheet" href="css/pages/blog.css">
+  <!--cursorly animation-->
+  <script src="https://cdn.jsdelivr.net/gh/iamashruu/cursorly.js@latest/dist/cursorly.min.js"></script>
+</head>
+<body>
+  <script>
+      const cursor = Cursorly.init();
+      cursor.setIcon(6);
+  </script>
+  <div id="page-loader"><div class="loader-logo">ZenMarket</div><div class="loader-dots"><span></span><span></span><span></span></div></div>
+  <div id="page-progress"></div>
+  <div id="toast-container"></div>
+  <main id="main" class="page-enter">
+    <div class="page-header">
+      <div class="container">
+        <h1>ZenMarket Blog</h1>
+        <p>Insights, guides, and stories from our team</p>
+      </div>
+    </div>
+    <div class="container section-sm">
+      <div id="blog-filter-bar" class="blog-filter-bar"></div>
+      <div id="blog-featured" class="blog-featured-banner" style="display:none"></div>
+      <div id="blog-grid" class="blog-grid"></div>
+      <div id="blog-empty" class="blog-empty" style="display:none">
+        <i class="fa-solid fa-newspaper"></i>
+        <h3>No posts yet</h3>
+        <p>Check back soon for guides, news and stories from ZenMarket.</p>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
