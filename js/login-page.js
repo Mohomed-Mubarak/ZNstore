@@ -18,6 +18,11 @@ import { initPhoneInput, getPhoneValue }            from './phone-input.js';
 import toast                                        from './toast.js';
 import { DEMO_MODE }                                from './config.js';
 import { safeRedirectPath }                         from './security-utils.js';
+import { initCaptcha, getWidgetToken, resetWidget } from './recaptcha.js';
+
+// ── hCaptcha widget IDs (set in withLoader after DOM is ready) ─
+let _hcapLoginId    = null;
+let _hcapRegisterId = null;
 
 // ── Return URL ────────────────────────────────────────────────
 function getReturnUrl() {
@@ -63,6 +68,12 @@ withLoader(async () => {
   }
 
   if (isLoggedIn()) { window.location.href = getReturnUrl(); return; }
+
+  // ── Init hCaptcha widgets ─────────────────────────────────
+  [_hcapLoginId, _hcapRegisterId] = await Promise.all([
+    initCaptcha('hcap-login'),
+    initCaptcha('hcap-register'),
+  ]);
 
   if (DEMO_MODE) {
     initTabs();
@@ -274,6 +285,12 @@ function _initSignInFlow() {
     if (!email)    { _showErr(errEl, errMsg, 'Please enter your email address.'); return; }
     if (!password) { _showErr(errEl, errMsg, 'Please enter your password.'); return; }
 
+    // ── hCaptcha check ───────────────────────────────────────
+    if (!getWidgetToken(_hcapLoginId)) {
+      _showErr(errEl, errMsg, 'Please complete the captcha check.');
+      return;
+    }
+
     btn.disabled = true;
     btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Signing in…';
 
@@ -287,6 +304,7 @@ function _initSignInFlow() {
 
     if (!result.success) {
       _showErr(errEl, errMsg, result.error || 'Sign in failed. Please try again.');
+      resetWidget(_hcapLoginId);
       btn.disabled = false;
       btn.innerHTML = '<i class="fa-solid fa-arrow-right-to-bracket"></i> Sign In';
       return;
@@ -407,6 +425,12 @@ function _initRegisterFlow() {
     if (password.length < 8) { _showErr(errEl, errMsg, 'Password must be at least 8 characters.'); return; }
     if (password !== confirm) { _showErr(errEl, errMsg, 'Passwords do not match.');          return; }
 
+    // ── hCaptcha check ───────────────────────────────────────
+    if (!getWidgetToken(_hcapRegisterId)) {
+      _showErr(errEl, errMsg, 'Please complete the captcha check.');
+      return;
+    }
+
     btn.disabled = true;
     btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Creating account…';
 
@@ -414,6 +438,7 @@ function _initRegisterFlow() {
 
     if (!result.success) {
       _showErr(errEl, errMsg, result.error);
+      resetWidget(_hcapRegisterId);
       btn.disabled = false;
       btn.innerHTML = '<i class="fa-solid fa-user-plus"></i> Create Account';
       return;
@@ -545,6 +570,13 @@ function initDemoLoginForm() {
 
   const doLogin = async () => {
     if (errEl) errEl.style.display = 'none';
+
+    // ── hCaptcha check ─────────────────────────────────────
+    if (!getWidgetToken(_hcapLoginId)) {
+      if (errEl && errMsg) { errMsg.textContent = 'Please complete the captcha check.'; errEl.style.display = 'flex'; }
+      return;
+    }
+
     btn.disabled = true;
     btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Signing in…';
 
@@ -557,6 +589,7 @@ function initDemoLoginForm() {
       setTimeout(() => window.location.href = getReturnUrl(), 800);
     } else {
       if (errEl && errMsg) { errMsg.textContent = result.error; errEl.style.display = 'flex'; }
+      resetWidget(_hcapLoginId);
       btn.disabled = false;
       btn.innerHTML = '<i class="fa-solid fa-arrow-right-to-bracket"></i> Sign In';
     }
@@ -592,6 +625,12 @@ function initDemoRegisterForm() {
     if (password !== confirm) { if (errEl && errMsg) { errMsg.textContent = 'Passwords do not match.'; errEl.style.display = 'flex'; } return; }
     if (password.length < 6)  { if (errEl && errMsg) { errMsg.textContent = 'Password must be at least 6 characters.'; errEl.style.display = 'flex'; } return; }
 
+    // ── hCaptcha check ───────────────────────────────────────
+    if (!getWidgetToken(_hcapRegisterId)) {
+      if (errEl && errMsg) { errMsg.textContent = 'Please complete the captcha check.'; errEl.style.display = 'flex'; }
+      return;
+    }
+
     btn.disabled = true;
     btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Creating account…';
 
@@ -601,6 +640,7 @@ function initDemoRegisterForm() {
       setTimeout(() => window.location.href = getReturnUrl(), 800);
     } else {
       if (errEl && errMsg) { errMsg.textContent = result.error; errEl.style.display = 'flex'; }
+      resetWidget(_hcapRegisterId);
       btn.disabled = false;
       btn.innerHTML = '<i class="fa-solid fa-user-plus"></i> Create Account';
     }

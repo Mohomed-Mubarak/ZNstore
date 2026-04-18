@@ -39,6 +39,7 @@
     import { addMessage } from './js/contact-messages.js';
     import toast from './js/toast.js';
     import { initPhoneInput, isPhoneValid, getPhoneValue } from './js/phone-input.js';
+    import { initCaptcha, getWidgetToken, resetWidget } from './js/recaptcha.js';
 
     withLoader(async () => {
       injectLayout({ activePage: 'Contact' });
@@ -99,6 +100,9 @@
       const phoneInput = document.querySelector('#contact-form input[name="phone"]');
       if (phoneInput) initPhoneInput(phoneInput);
 
+      // ── Init hCaptcha ─────────────────────────────────────────
+      const hcapContactId = await initCaptcha('hcap-contact');
+
       document.getElementById('contact-form')?.addEventListener('submit', async e => {
         e.preventDefault();
         toast.dismissAll();
@@ -122,6 +126,13 @@
         }
         if (data.phone && !isPhoneValid(phoneInput)) {
           toast.error('Invalid phone', 'Enter a valid number: +94 followed by 9 digits.');
+          return;
+        }
+
+        // ── hCaptcha check ─────────────────────────────────────
+        const captchaToken = getWidgetToken(hcapContactId);
+        if (!captchaToken) {
+          toast.error('Captcha required', 'Please complete the captcha check.');
           return;
         }
 
@@ -159,6 +170,7 @@
             console.warn('[ZenMarket] EmailJS send failed:', err);
             toast.warning('Saved locally', 'Email delivery failed — our team will still see your message in the admin panel.');
             form.reset();
+            resetWidget(hcapContactId);
             btn.disabled = false;
             btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Send Message';
             return;
@@ -167,6 +179,7 @@
 
         toast.success('Message Sent!', 'We\'ll get back to you within 24 hours.');
         form.reset();
+        resetWidget(hcapContactId);
         btn.disabled = false;
         btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Send Message';
       });
@@ -183,6 +196,8 @@
   </script>
   <link rel="stylesheet" href="css/loader.css">
   <link rel="stylesheet" href="css/pages/contact.css">
+  <!-- hCaptcha — explicit render, themed by JS -->
+  <script src="https://js.hcaptcha.com/1/api.js?render=explicit" async defer></script>
 </head>
 
 <body>
@@ -294,6 +309,7 @@
               <textarea class="form-control" name="message" rows="5" required
                 placeholder="Tell us how we can help…"></textarea>
             </div>
+            <div id="hcap-contact" style="margin-bottom:1rem"></div>
             <button type="submit" class="btn btn-primary btn-block btn-lg">
               <i class="fa-solid fa-paper-plane"></i> Send Message
             </button>

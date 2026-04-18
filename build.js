@@ -118,7 +118,10 @@ const env = {
   EMAILJS_PUBLIC_KEY:  get('EMAILJS_PUBLIC_KEY',   ''),
   EMAILJS_SERVICE_ID:  get('EMAILJS_SERVICE_ID',   ''),
   EMAILJS_TEMPLATE_ID: get('EMAILJS_TEMPLATE_ID',  ''),
-  EMAILJS_ADMIN_EMAIL: get('EMAILJS_ADMIN_EMAIL',  'admin@zenmarket.lk'),
+  EMAILJS_ADMIN_EMAIL:  get('EMAILJS_ADMIN_EMAIL',  'admin@zenmarket.lk'),
+  // hCaptcha — site key is PUBLIC (safe in browser bundle)
+  // Secret key lives only in Vercel env vars (server-side /api routes)
+  HCAPTCHA_SITE_KEY:   get('HCAPTCHA_SITE_KEY',   '10000000-ffff-ffff-ffff-000000000001'),
   // Exposed so admin JS can authenticate calls to /api/admin/* endpoints.
   // The admin panel itself is password-gated — this matches that security level.
   ADMIN_API_TOKEN:     get('ADMIN_API_TOKEN',     ''),
@@ -161,6 +164,7 @@ export const ENV = Object.freeze({
   EMAILJS_SERVICE_ID:  \`${jsStr(env.EMAILJS_SERVICE_ID)}\`,
   EMAILJS_TEMPLATE_ID: \`${jsStr(env.EMAILJS_TEMPLATE_ID)}\`,
   EMAILJS_ADMIN_EMAIL: \`${jsStr(env.EMAILJS_ADMIN_EMAIL)}\`,
+  HCAPTCHA_SITE_KEY:   \`${jsStr(env.HCAPTCHA_SITE_KEY)}\`,
   ADMIN_API_TOKEN:     \`${jsStr(env.ADMIN_API_TOKEN)}\`,
 });
 `;

@@ -44,6 +44,12 @@ export const EMAILJS = {
   adminEmail: ENV.EMAILJS_ADMIN_EMAIL,
 };
 
+// ── hCaptcha ─────────────────────────────────────────────────
+// Site key is public (safe in browser bundle).
+// Replace the test key (10000000-ffff-…) with your real key before going live.
+// Secret key must stay server-only in Vercel environment variables.
+export const HCAPTCHA_SITE_KEY = ENV.HCAPTCHA_SITE_KEY;
+
 // ── Store Settings (not secret — safe to hardcode) ───────────
 export const STORE = {
   name:           'ZenMarket',

@@ -20,6 +20,8 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link rel="stylesheet" href="css/loader.css">
   <link rel="stylesheet" href="css/pages/login.css">
+  <!-- hCaptcha — explicit render, themed by JS -->
+  <script src="https://js.hcaptcha.com/1/api.js?render=explicit" async defer></script>
 </head>
 <body>
   <div id="page-loader"><div class="loader-logo">ZenMarket</div><div class="loader-dots"><span></span><span></span><span></span></div></div>
@@ -101,6 +103,8 @@
               </button>
             </div>
           </div>
+
+          <div id="hcap-login" style="margin-bottom:1rem"></div>
 
           <button class="btn btn-primary btn-block btn-lg" id="pli-btn" style="margin-top:.25rem">
             <i class="fa-solid fa-arrow-right-to-bracket"></i> Sign In
@@ -185,6 +189,8 @@
                 </button>
               </div>
             </div>
+
+            <div id="hcap-register" style="margin-bottom:1rem"></div>
 
             <button class="btn btn-primary btn-block btn-lg" id="preg-btn" style="margin-top:.25rem">
               <i class="fa-solid fa-user-plus"></i> Create Account
